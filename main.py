@@ -1,16 +1,21 @@
-import historical_data
-import preliminary_analysis
-import portfolio_analysis
+# main.py
+from historical_data import DataFetcher
+from portfolio_analysis import PortfolioAnalyzer
+from preliminary_analysis import StockAnalyzer
 
-# define the symbols to include in analysis 
-stocks = ['TSLA','AMD','SOFI','WBA','MDLZ','AAPL','NVDA','PLTR','SNOW','AMZN']
+# Define the list of stock symbols
+stocks = ['TSLA', 'AMD', 'SOFI', 'WBA', 'MDLZ', 'AAPL', 'NVDA', 'PLTR', 'SNOW', 'AMZN']
 
-# fetch and save the data 
-historical_data.fetch_and_save(stocks)
+# Create instances of the classes
+data_fetcher = DataFetcher()
+portfolio_analyzer = PortfolioAnalyzer()
+stock_analyzer = StockAnalyzer()
 
-# perform preliminary analysis
-preliminary_analysis.analyze(stocks)
+# Fetch and save historical data
+data_fetcher.fetch_and_save_data(stocks)
 
-# perform portfolio analysis
-portfolio_analysis.optimize_portfolio(stocks)
+# Perform preliminary analysis
+stock_analyzer.analyze(stocks)
 
+# Optimize the portfolio
+portfolio_analyzer.optimize_portfolio(stocks)
