@@ -122,7 +122,8 @@ class PortfolioAnalyzer:
         plt.ylabel('Expected Return')
         plt.title('Efficient Frontier')
         plt.legend()
-        plt.show()
+        plt.savefig('efficient_frontier.png')
+        plt.close()
 
         return {
             'sharpe': best_sharpe_details,

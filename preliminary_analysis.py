@@ -36,7 +36,8 @@ class StockAnalyzer:
         plt.title(f'{stock} Daily Returns')
         plt.xlabel('Date')
         plt.ylabel('Returns')
-        plt.show()
+        plt.savefig(f'{stock}_daily_returns.png')
+        plt.close()
 
         # Plot holding period returns
         holding_period_returns = (1 + daily_returns).cumprod() - 1
@@ -45,7 +46,8 @@ class StockAnalyzer:
         plt.title(f'{stock} Holding Period Returns')
         plt.xlabel('Date')
         plt.ylabel('Cumulative Returns')
-        plt.show()
+        plt.savefig(f'{stock}_holding_period_returns.png')
+        plt.close()
 
         # Plot historical volatility
         rolling_std = daily_returns.rolling(window=20).std()
@@ -54,7 +56,8 @@ class StockAnalyzer:
         plt.title(f'{stock} Historical Volatility (20-day rolling std)')
         plt.xlabel('Date')
         plt.ylabel('Volatility')
-        plt.show()
+        plt.savefig(f'{stock}_historical_volatility.png')
+        plt.close()
 
         # Plot Bollinger Bands
         adj_close = data['Adj Close']
@@ -71,7 +74,8 @@ class StockAnalyzer:
         plt.xlabel('Date')
         plt.ylabel('Price')
         plt.legend()
-        plt.show()
+        plt.savefig(f'{stock}_bollinger_bands.png')
+        plt.close()
 
         # Plot VaR and ES
         var, es = self.calculate_var_es(daily_returns.dropna())
@@ -83,7 +87,8 @@ class StockAnalyzer:
         plt.xlabel('Returns')
         plt.ylabel('Frequency')
         plt.legend()
-        plt.show()
+        plt.savefig(f'{stock}_var_es.png')
+        plt.close()
 
         # Plot line chart with moving averages
         short_rolling = data['Adj Close'].rolling(window=20).mean()
@@ -96,7 +101,8 @@ class StockAnalyzer:
         plt.xlabel('Date')
         plt.ylabel('Price')
         plt.legend()
-        plt.show()
+        plt.savefig(f'{stock}_moving_averages.png')
+        plt.close()
 
     def analyze_stock(self, stock):
         data = self.load_data(stock)
@@ -126,13 +132,15 @@ class StockAnalyzer:
         plt.xlabel('Stocks')
         plt.ylabel('Annualized Volatility')
         plt.xticks(rotation=45)
-        plt.show()
+        plt.savefig('annualized_volatilities.png')
+        plt.close()
 
         # Plot correlation matrix
         correlations = combined_returns.corr()
         plt.figure(figsize=(10, 7))
         sns.heatmap(correlations, annot=True, cmap='coolwarm')
         plt.title('Correlation Matrix')
-        plt.show()
+        plt.savefig('correlation_matrix.png')
+        plt.close()
 
         return results
