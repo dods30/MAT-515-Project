@@ -12,6 +12,7 @@ data_fetcher = DataFetcher()
 portfolio_analyzer = PortfolioAnalyzer()
 stock_analyzer = StockAnalyzer()
 
+
 # Fetch and save historical data
 data_fetcher.fetch_and_save_data(stocks)
 

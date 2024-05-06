@@ -82,6 +82,7 @@ class PortfolioBacktester:
         future_returns_list = []
         for _ in range(num_simulations):
             future_returns = self.generate_future_returns(cumulative_returns.pct_change(), num_years)
+            future_returns = future_returns.reset_index(drop=True)  # Reset the index
             future_returns_list.append(future_returns)
 
         future_returns_df = pd.concat(future_returns_list, axis=1)
