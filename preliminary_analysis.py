@@ -1,3 +1,4 @@
+#preliminar_analysis.py
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -30,34 +31,28 @@ class StockAnalyzer:
     def plot_data(self, stock, data):
         daily_returns = data['Adj Close'].pct_change()
 
+        fig, axs = plt.subplots(3, 2, figsize=(14, 18))
+        fig.suptitle(f'{stock} Analysis', fontsize=16)
+
         # Plot daily returns
-        plt.figure(figsize=(10, 6))
-        plt.plot(daily_returns)
-        plt.title(f'{stock} Daily Returns')
-        plt.xlabel('Date')
-        plt.ylabel('Returns')
-        plt.savefig(f'{stock}_daily_returns.png')
-        plt.close()
+        axs[0, 0].plot(daily_returns)
+        axs[0, 0].set_title('Daily Returns')
+        axs[0, 0].set_xlabel('Date')
+        axs[0, 0].set_ylabel('Returns')
 
         # Plot holding period returns
         holding_period_returns = (1 + daily_returns).cumprod() - 1
-        plt.figure(figsize=(10, 6))
-        plt.plot(holding_period_returns)
-        plt.title(f'{stock} Holding Period Returns')
-        plt.xlabel('Date')
-        plt.ylabel('Cumulative Returns')
-        plt.savefig(f'{stock}_holding_period_returns.png')
-        plt.close()
+        axs[0, 1].plot(holding_period_returns)
+        axs[0, 1].set_title('Holding Period Returns')
+        axs[0, 1].set_xlabel('Date')
+        axs[0, 1].set_ylabel('Cumulative Returns')
 
         # Plot historical volatility
         rolling_std = daily_returns.rolling(window=20).std()
-        plt.figure(figsize=(10, 6))
-        plt.plot(rolling_std)
-        plt.title(f'{stock} Historical Volatility (20-day rolling std)')
-        plt.xlabel('Date')
-        plt.ylabel('Volatility')
-        plt.savefig(f'{stock}_historical_volatility.png')
-        plt.close()
+        axs[1, 0].plot(rolling_std)
+        axs[1, 0].set_title('Historical Volatility (20-day rolling std)')
+        axs[1, 0].set_xlabel('Date')
+        axs[1, 0].set_ylabel('Volatility')
 
         # Plot Bollinger Bands
         adj_close = data['Adj Close']
@@ -65,43 +60,38 @@ class StockAnalyzer:
         rolling_std = adj_close.rolling(window=20).std()
         bollinger_upper = rolling_mean + (rolling_std * 2)
         bollinger_lower = rolling_mean - (rolling_std * 2)
-        plt.figure(figsize=(10, 6))
-        plt.plot(adj_close.index, adj_close, label='Adjusted Close')
-        plt.plot(bollinger_upper.index, bollinger_upper, label='Upper Band', linestyle='--')
-        plt.plot(bollinger_lower.index, bollinger_lower, label='Lower Band', linestyle='--')
-        plt.fill_between(adj_close.index, bollinger_lower, bollinger_upper, alpha=0.1)
-        plt.title(f'{stock} Bollinger Bands')
-        plt.xlabel('Date')
-        plt.ylabel('Price')
-        plt.legend()
-        plt.savefig(f'{stock}_bollinger_bands.png')
-        plt.close()
+        axs[1, 1].plot(adj_close.index, adj_close, label='Adjusted Close')
+        axs[1, 1].plot(bollinger_upper.index, bollinger_upper, label='Upper Band', linestyle='--')
+        axs[1, 1].plot(bollinger_lower.index, bollinger_lower, label='Lower Band', linestyle='--')
+        axs[1, 1].fill_between(adj_close.index, bollinger_lower, bollinger_upper, alpha=0.1)
+        axs[1, 1].set_title('Bollinger Bands')
+        axs[1, 1].set_xlabel('Date')
+        axs[1, 1].set_ylabel('Price')
+        axs[1, 1].legend()
 
         # Plot VaR and ES
         var, es = self.calculate_var_es(daily_returns.dropna())
-        plt.figure(figsize=(10, 6))
-        plt.hist(daily_returns.dropna(), bins=50, alpha=0.75)
-        plt.axvline(x=var, color='r', linestyle='--', label=f'VaR (95%): {var:.2%}')
-        plt.axvline(x=es, color='g', linestyle='--', label=f'ES (95%): {es:.2%}')
-        plt.title(f'{stock} Return Distribution with VaR and ES')
-        plt.xlabel('Returns')
-        plt.ylabel('Frequency')
-        plt.legend()
-        plt.savefig(f'{stock}_var_es.png')
-        plt.close()
+        axs[2, 0].hist(daily_returns.dropna(), bins=50, alpha=0.75)
+        axs[2, 0].axvline(x=var, color='r', linestyle='--', label=f'VaR (95%): {var:.2%}')
+        axs[2, 0].axvline(x=es, color='g', linestyle='--', label=f'ES (95%): {es:.2%}')
+        axs[2, 0].set_title('Return Distribution with VaR and ES')
+        axs[2, 0].set_xlabel('Returns')
+        axs[2, 0].set_ylabel('Frequency')
+        axs[2, 0].legend()
 
         # Plot line chart with moving averages
         short_rolling = data['Adj Close'].rolling(window=20).mean()
         long_rolling = data['Adj Close'].rolling(window=50).mean()
-        plt.figure(figsize=(10, 6))
-        plt.plot(data['Adj Close'], label='Adjusted Close')
-        plt.plot(short_rolling, label='20-day MA', linestyle='--')
-        plt.plot(long_rolling, label='50-day MA', linestyle='-.')
-        plt.title(f'{stock} Line Chart with Moving Averages')
-        plt.xlabel('Date')
-        plt.ylabel('Price')
-        plt.legend()
-        plt.savefig(f'{stock}_moving_averages.png')
+        axs[2, 1].plot(data['Adj Close'], label='Adjusted Close')
+        axs[2, 1].plot(short_rolling, label='20-day MA', linestyle='--')
+        axs[2, 1].plot(long_rolling, label='50-day MA', linestyle='-.')
+        axs[2, 1].set_title('Line Chart with Moving Averages')
+        axs[2, 1].set_xlabel('Date')
+        axs[2, 1].set_ylabel('Price')
+        axs[2, 1].legend()
+
+        plt.tight_layout()
+        plt.savefig(f'{stock}_analysis.png')
         plt.close()
 
     def analyze_stock(self, stock):

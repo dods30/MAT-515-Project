@@ -1,3 +1,4 @@
+#portfolio_analysis.py
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -100,7 +101,8 @@ class PortfolioAnalyzer:
         colors = cm.viridis(normalize(sharpe_array))
         plt.figure(figsize=(10, 6))
 
-        scatter = plt.scatter(all_vols, all_returns, c=colors, cmap='viridis', marker='o', alpha=0.3, label='Random Portfolios')
+        
+        scatter = plt.scatter(all_vols, all_returns, c=all_sharpes, cmap='viridis', marker='o', alpha=0.3, label='Random Portfolios')
         plt.plot(efficient_vols, efficient_returns, color='black', marker='.', linestyle='-', label='Efficient Frontier')
         plt.scatter(best_sharpe_details['volatility'], best_sharpe_details['return'], c='r', marker='*', s=200, label='Best Sharpe Ratio Portfolio')
         plt.scatter(best_vol_details['volatility'], best_vol_details['return'], c='b', marker='*', s=200, label='Best Minimum Volatility Portfolio')

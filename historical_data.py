@@ -1,7 +1,8 @@
+#historical_data.py
 import yfinance as yf
 
 class DataFetcher:
-    def __init__(self, start_date='2020-02-27', end_date='2024-02-27'):
+    def __init__(self, start_date='2020-01-01', end_date='2024-05-20'):
         self.start_date = start_date
         self.end_date = end_date
 
